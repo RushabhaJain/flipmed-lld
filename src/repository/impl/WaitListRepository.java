@@ -21,7 +21,7 @@ public class WaitListRepository implements IWaitListRepository {
 
     public Appointment getNextQueuedAppointment(Appointment appointment) {
         String key = appointment.getDoctorId().toString() + "-" + appointment.getTimeslot().getStartTime();
-        if (this.waitlist.containsKey(key) && this.waitlist.get(key).size() > 0) {
+        if (this.waitlist.containsKey(key) && !this.waitlist.get(key).isEmpty()) {
             return this.waitlist.get(key).poll();
         }
         return null;

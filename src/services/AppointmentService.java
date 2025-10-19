@@ -2,34 +2,27 @@ package services;
 
 import exceptions.*;
 import models.*;
-import repository.IRepository;
-import repository.impl.AppointmentRepository;
-import repository.impl.DoctorRepository;
-import repository.impl.PatientRepository;
-import repository.impl.WaitListRepository;
 import strategies.rankStrategy.RankStrategy;
-import strategies.timeslotValidationStrategy.impl.OneHourTimeslotValidationStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class AppointmentService {
-    private DoctorRepository doctorRepository;
-    private PatientRepository patientRepository;
-    private IRepository appointmentRepository;
-    private WaitListRepository waitListRepository;
+    private final AppointmentBookingService bookingService;
+    private final AppointmentCancellationService cancellationService;
+    private final AppointmentQueryService queryService;
+    private final DoctorSlotService slotService;
 
     public AppointmentService(
-            IRepository appointmentRepository,
-            DoctorRepository doctorRepository,
-            PatientRepository patientRepository,
-            WaitListRepository waitListRepository
+            AppointmentBookingService bookingService,
+            AppointmentCancellationService cancellationService,
+            AppointmentQueryService queryService,
+            DoctorSlotService slotService
     ) {
-        this.appointmentRepository = appointmentRepository;
-        this.patientRepository = patientRepository;
-        this.doctorRepository = doctorRepository;
-        this.waitListRepository = waitListRepository;
+        this.bookingService = bookingService;
+        this.cancellationService = cancellationService;
+        this.queryService = queryService;
+        this.slotService = slotService;
     }
 
     public Appointment bookAppointment(

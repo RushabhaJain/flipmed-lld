@@ -1,14 +1,14 @@
 package repository.impl;
 
 import models.Patient;
-import repository.IRepository;
+import repository.IPatientRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class PatientRepository implements IRepository<Patient, UUID> {
+public class PatientRepository implements IPatientRepository {
 
     Map<UUID, Patient> map = new HashMap<>();
 

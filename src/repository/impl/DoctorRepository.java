@@ -2,20 +2,20 @@ package repository.impl;
 
 import models.Doctor;
 import models.DoctorSpeciality;
-import repository.IRepository;
+import repository.IDoctorRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class DoctorRepository implements IRepository<Doctor, UUID> {
+public class DoctorRepository implements IDoctorRepository {
     private Map<UUID, Doctor> map = new HashMap<>();
 
     @Override
-    public Doctor save(Doctor entity) {
-        map.put(entity.getId(), entity);
-        return entity;
+    public Doctor save(Doctor doctor) {
+        map.put(doctor.getId(), doctor);
+        return doctor;
     }
 
     @Override

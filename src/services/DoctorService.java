@@ -1,32 +1,36 @@
 package services;
 
+import constants.AppConstants;
+import exceptions.InvalidDoctorException;
 import exceptions.InvalidTimeslotException;
 import models.Doctor;
 import models.DoctorSpeciality;
 import models.Timeslot;
-import repository.IRepository;
-import strategies.timeslotValidationStrategy.impl.OneHourTimeslotValidationStrategy;
+import repository.IDoctorRepository;
+import validation.DoctorValidator;
 
 import java.util.UUID;
 
 public class DoctorService {
-    private final IRepository doctorRepository;
+    private final IDoctorRepository doctorRepository;
 
-    public DoctorService(IRepository doctorRepository) {
+    public DoctorService(IDoctorRepository doctorRepository) {
         this.doctorRepository = doctorRepository;
     }
 
-    public Doctor register(String doctorName, DoctorSpeciality speciality) {
-        Doctor doctor = new Doctor(UUID.randomUUID(), doctorName, Math.random() * 6, speciality);
-        return (Doctor) this.doctorRepository.save(doctor);
+    public Doctor register(String doctorName, DoctorSpeciality speciality) throws InvalidDoctorException {
+        double rating = Math.random() * AppConstants.MAX_DOCTOR_RATING;
+        Doctor doctor = new Doctor(UUID.randomUUID(), doctorName, rating, speciality);
+        DoctorValidator.validateDoctor(doctor);
+        return this.doctorRepository.save(doctor);
     }
 
     public void addAvailability(UUID doctorId, int startTime, int endTime) throws InvalidTimeslotException {
-        Doctor doctor = (Doctor) doctorRepository.findById(doctorId);
-        doctor.addFreeTimeslot(
-                new Timeslot(startTime, endTime),
-                new OneHourTimeslotValidationStrategy()
-        );
+        Doctor doctor = doctorRepository.findById(doctorId);
+        if (doctor == null) {
+            throw new exceptions.DoctorNotFoundException("Doctor not found with ID: " + doctorId);
+        }
+        doctor.addFreeTimeslot(new Timeslot(startTime, endTime));
         doctorRepository.save(doctor);
     }
 }

@@ -1,21 +1,22 @@
 package repository.impl;
 
 import models.Appointment;
-import repository.IRepository;
+import repository.IWaitListRepository;
 
 import java.util.*;
 
-public class WaitListRepository {
+public class WaitListRepository implements IWaitListRepository {
     private final Map<String, Queue<Appointment>> waitlist = new HashMap<>();
 
     public Appointment addToWaitList(Appointment appointment) {
         String key = appointment.getDoctorId().toString() + "-" + appointment.getTimeslot().getStartTime();
         if (this.waitlist.containsKey(key)) {
             this.waitlist.get(key).add(appointment);
+        } else {
+            Queue<Appointment> queue = new LinkedList<>();
+            queue.add(appointment);
+            this.waitlist.put(key, queue);
         }
-        Queue<Appointment> queue = new LinkedList<>();
-        queue.add(appointment);
-        this.waitlist.put(key, queue);
         return appointment;
     }
 

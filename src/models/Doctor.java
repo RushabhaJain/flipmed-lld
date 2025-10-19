@@ -2,7 +2,6 @@ package models;
 
 import exceptions.InvalidTimeslotException;
 import exceptions.TimeslotNotFoundException;
-import strategies.timeslotValidationStrategy.TimeslotValidationStrategy;
 
 import java.util.*;
 
@@ -44,10 +43,8 @@ public class Doctor {
         this.freeTimeslots.remove(slot);
     }
 
-    public void addFreeTimeslot(Timeslot slot, TimeslotValidationStrategy timeslotValidationStrategy) throws InvalidTimeslotException{
-        if (!timeslotValidationStrategy.validate(slot)) {
-            throw new InvalidTimeslotException();
-        }
+    public void addFreeTimeslot(Timeslot slot) throws InvalidTimeslotException{
+        validation.TimeslotValidator.validateTimeslot(slot);
         this.freeTimeslots.add(slot);
     }
 

@@ -1,7 +1,7 @@
 package repository.impl;
 
 import models.Appointment;
-import repository.IRepository;
+import repository.IAppointmentRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class AppointmentRepository implements IRepository<Appointment, UUID> {
+public class AppointmentRepository implements IAppointmentRepository {
     Map<UUID, Appointment> map = new HashMap<>();
 
     @Override
@@ -44,7 +44,7 @@ public class AppointmentRepository implements IRepository<Appointment, UUID> {
         return map.values()
                 .stream()
                 .filter(
-                        appointment -> appointment.getPatientId() == patientId
+                        appointment -> appointment.getPatientId().equals(patientId)
                 )
                 .toList();
     }

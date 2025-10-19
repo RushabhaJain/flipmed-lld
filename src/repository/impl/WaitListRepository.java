@@ -8,7 +8,7 @@ import java.util.*;
 public class WaitListRepository implements IWaitListRepository {
     private final Map<String, Queue<Appointment>> waitlist = new HashMap<>();
 
-    public Appointment addToWaitList(Appointment appointment) {
+    public void addToWaitList(Appointment appointment) {
         String key = appointment.getDoctorId().toString() + "-" + appointment.getTimeslot().getStartTime();
         if (this.waitlist.containsKey(key)) {
             this.waitlist.get(key).add(appointment);
@@ -17,7 +17,6 @@ public class WaitListRepository implements IWaitListRepository {
             queue.add(appointment);
             this.waitlist.put(key, queue);
         }
-        return appointment;
     }
 
     public Appointment getNextQueuedAppointment(Appointment appointment) {

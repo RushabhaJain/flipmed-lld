@@ -27,11 +27,15 @@ public class DoctorService {
     }
 
     public void addAvailability(UUID doctorId, int startTime, int endTime) throws InvalidTimeslotException, DoctorNotFoundException {
+        addAvailability(doctorId, startTime, 0, endTime, 0);
+    }
+    
+    public void addAvailability(UUID doctorId, int startHour, int startMinute, int endHour, int endMinute) throws InvalidTimeslotException, DoctorNotFoundException {
         Doctor doctor = doctorRepository.findById(doctorId);
         if (doctor == null) {
             throw new DoctorNotFoundException("Doctor not found with ID: " + doctorId);
         }
-        doctor.addFreeTimeslot(new Timeslot(startTime, endTime));
+        doctor.addFreeTimeslot(new Timeslot(startHour, startMinute, endHour, endMinute));
         doctorRepository.save(doctor);
     }
 }

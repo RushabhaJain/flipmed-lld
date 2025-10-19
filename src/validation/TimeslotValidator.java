@@ -10,21 +10,29 @@ public class TimeslotValidator {
             return false;
         }
         
-        int startTime = timeslot.getStartTime();
-        int endTime = timeslot.getEndTime();
+        int startHour = timeslot.getStartHour();
+        int startMinute = timeslot.getStartMinute();
+        int endHour = timeslot.getEndHour();
+        int endMinute = timeslot.getEndMinute();
         
-        // Check if times are within valid range
-        if (startTime < AppConstants.MIN_START_TIME || endTime > AppConstants.MAX_END_TIME) {
+        // Check if hours and minutes are within valid range
+        if (startHour < AppConstants.MIN_START_HOUR || startHour > AppConstants.MAX_END_HOUR ||
+            endHour < AppConstants.MIN_START_HOUR || endHour > AppConstants.MAX_END_HOUR) {
+            return false;
+        }
+        
+        if (startMinute < AppConstants.MIN_MINUTE || startMinute > AppConstants.MAX_MINUTE ||
+            endMinute < AppConstants.MIN_MINUTE || endMinute > AppConstants.MAX_MINUTE) {
             return false;
         }
         
         // Check if start time is before end time
-        if (startTime >= endTime) {
+        if (timeslot.getStartTimeInMinutes() >= timeslot.getEndTimeInMinutes()) {
             return false;
         }
         
-        // Check if duration is exactly 1 hour
-        if (endTime - startTime != AppConstants.DEFAULT_TIMESLOT_DURATION_HOURS) {
+        // Check if duration is positive (greater than 0)
+        if (timeslot.getDurationInMinutes() <= 0) {
             return false;
         }
         
@@ -36,4 +44,5 @@ public class TimeslotValidator {
             throw new exceptions.InvalidTimeslotException("Invalid timeslot: " + timeslot);
         }
     }
+    
 }

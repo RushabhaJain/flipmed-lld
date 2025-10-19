@@ -18,7 +18,11 @@ public class Main {
     public static void printDoctorSlots(List<DoctorSlot> doctorSlots) {
         for(DoctorSlot doctorSlot: doctorSlots) {
             Logger.info("Doctor: " + doctorSlot.getDoctor().getName());
-            Logger.info("Slot: " + doctorSlot.getTimeslot().getStartTime() + " - " + doctorSlot.getTimeslot().getEndTime());
+            Timeslot slot = doctorSlot.getTimeslot();
+            Logger.info("Slot: " + String.format("%02d:%02d - %02d:%02d (%d minutes)", 
+                slot.getStartHour(), slot.getStartMinute(), 
+                slot.getEndHour(), slot.getEndMinute(),
+                slot.getDurationInMinutes()));
             Logger.info("-------------------");
         }
     }
@@ -49,7 +53,7 @@ public class Main {
         Doctor doctorRushabha = doctorService
                 .register("Rushabha", DoctorSpeciality.CARDIOLOGIST);
         
-        // Add availability slots for Rushabha
+        // Add availability slots for Rushabha (1-hour slots)
         doctorService.addAvailability(doctorRushabha.getId(), 9, 10);
         doctorService.addAvailability(doctorRushabha.getId(), 10, 11);
         doctorService.addAvailability(doctorRushabha.getId(), 11, 12);
@@ -57,6 +61,12 @@ public class Main {
         Doctor doctorSwati = doctorService
                 .register("Swati", DoctorSpeciality.CARDIOLOGIST);
         doctorService.addAvailability(doctorSwati.getId(), 10, 11);
+        
+        // Add 30-minute slots for Swati
+        Logger.info("Adding 30-minute slots for Swati...");
+        doctorService.addAvailability(doctorSwati.getId(), 10, 30, 11, 0);  // 10:30-11:00
+        doctorService.addAvailability(doctorSwati.getId(), 11, 30, 12, 0);  // 11:30-12:00
+        doctorService.addAvailability(doctorSwati.getId(), 14, 0, 14, 30);  // 14:00-14:30
 
         // Register patients
         Logger.info("Registering patients...");
@@ -70,6 +80,13 @@ public class Main {
             patientMitesh.getId(), doctorRushabha.getId(), timeslot);
         Appointment tejasAppointment = bookingService.bookAppointment(
             patientTejas.getId(), doctorRushabha.getId(), new Timeslot(11, 12));
+        
+        // Book a 30-minute appointment
+        Logger.info("Booking 30-minute appointment...");
+        Timeslot thirtyMinuteSlot = new Timeslot(10, 30, 11, 0);
+        Appointment thirtyMinuteAppointment = bookingService.bookAppointment(
+            patientMitesh.getId(), doctorSwati.getId(), thirtyMinuteSlot);
+        Logger.info("30-minute appointment booked: " + thirtyMinuteAppointment);
 
         // Display available slots
         Logger.info("Available doctor slots:");
@@ -92,7 +109,7 @@ public class Main {
         // Using booking service directly
         Logger.info("Using AppointmentBookingService directly:");
         Appointment directBooking = bookingService.bookAppointment(
-            patientMitesh.getId(), doctorSwati.getId(), new Timeslot(10, 11));
+            patientMitesh.getId(), doctorSwati.getId(), new Timeslot(11, 30, 12, 0));
         Logger.info("Direct booking result: " + directBooking);
         
         // Using query service directly

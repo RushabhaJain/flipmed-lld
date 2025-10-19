@@ -15,8 +15,7 @@ public class AppointmentRepository implements IAppointmentRepository {
     @Override
     public Appointment save(Appointment appointment) {
         map.put(appointment.getAppointmentId(), appointment);
-        System.out.println("Saving appointment");
-        System.out.println(map.get(appointment.getAppointmentId()));
+        utils.Logger.debug("Saving appointment: " + appointment.getAppointmentId());
         return appointment;
     }
 
@@ -50,7 +49,7 @@ public class AppointmentRepository implements IAppointmentRepository {
     }
 
     public List<Appointment> getAllAppointmentsOfDoctor(UUID doctorId) {
-        System.out.println("Fetching all appointments of doctor: " + doctorId);
+        utils.Logger.debug("Fetching all appointments of doctor: " + doctorId);
         return map.values()
                 .stream()
                 .filter(

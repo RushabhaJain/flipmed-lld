@@ -3,6 +3,8 @@ package services;
 import exceptions.DoctorNotFoundException;
 import exceptions.PatientNotFoundException;
 import models.Appointment;
+import models.Doctor;
+import models.Patient;
 import repository.IAppointmentRepository;
 import repository.IDoctorRepository;
 import repository.IPatientRepository;

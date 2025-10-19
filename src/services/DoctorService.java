@@ -1,6 +1,7 @@
 package services;
 
 import constants.AppConstants;
+import exceptions.DoctorNotFoundException;
 import exceptions.InvalidDoctorException;
 import exceptions.InvalidTimeslotException;
 import models.Doctor;
@@ -25,10 +26,10 @@ public class DoctorService {
         return this.doctorRepository.save(doctor);
     }
 
-    public void addAvailability(UUID doctorId, int startTime, int endTime) throws InvalidTimeslotException {
+    public void addAvailability(UUID doctorId, int startTime, int endTime) throws InvalidTimeslotException, DoctorNotFoundException {
         Doctor doctor = doctorRepository.findById(doctorId);
         if (doctor == null) {
-            throw new exceptions.DoctorNotFoundException("Doctor not found with ID: " + doctorId);
+            throw new DoctorNotFoundException("Doctor not found with ID: " + doctorId);
         }
         doctor.addFreeTimeslot(new Timeslot(startTime, endTime));
         doctorRepository.save(doctor);
